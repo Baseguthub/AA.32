@@ -1,0 +1,8 @@
+{
+  "name": "AI System Architect",
+  "description": "An intuitive drag-and-drop web application for visualizing and conceptualizing complex AI systems. Design your ideal AI architecture by connecting various modules, including multi-agent teams, and leverage an integrated Gemini assistant to help design and refine your flows.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "prompt": ""
+}

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI System Architect</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'canvas-bg': '#101014',
+              'panel-bg': 'rgba(37, 37, 38, 0.4)',
+              'sidebar-bg': 'rgba(44, 44, 46, 0.35)',
+              'accent': '#0ea5e9', // sky-500
+              'accent-hover': '#0284c7', // sky-600
+              'border-color': 'rgba(74, 74, 79, 0.5)',
+              'text-primary': '#f0f0f0',
+              'text-secondary': '#a0a0a0',
+            },
+            keyframes: {
+              aurora: {
+                '0%': { backgroundPosition: '0% 50%' },
+                '50%': { backgroundPosition: '100% 50%' },
+                '100%': { backgroundPosition: '0% 50%' },
+              },
+              'pulse-glow-base': {
+                '0%, 100%': { 'strokeOpacity': '0.2', 'strokeWidth': '15px', 'filter': 'blur(10px)' },
+                '50%': { 'strokeOpacity': '0.9', 'strokeWidth': '30px', 'filter': 'blur(20px)' },
+              },
+              'pulse-glow-selected': {
+                '0%, 100%': { 'strokeOpacity': '0.5', 'strokeWidth': '3px', 'filter': 'drop-shadow(0 0 4px #7dd3fc)' },
+                '50%': { 'strokeOpacity': '1', 'strokeWidth': '4px', 'filter': 'drop-shadow(0 0 8px #7dd3fc)' },
+              },
+              'flow-packet-pulse': {
+                '0%, 100%': { 'transform': 'scale(1)', 'filter': 'brightness(1.2) drop-shadow(0 0 5px rgba(255, 255, 255, 0.6))' },
+                '50%': { 'transform': 'scale(1.1)', 'filter': 'brightness(1.8) drop-shadow(0 0 12px rgba(255, 255, 255, 0.9))' },
+              },
+              'toast-in': {
+                'from': { transform: 'translateY(100%) scale(0.9)', opacity: '0' },
+                'to': { transform: 'translateY(0) scale(1)', opacity: '1' },
+              },
+              'toast-out': {
+                'from': { transform: 'translateY(0) scale(1)', opacity: '1' },
+                'to': { transform: 'translateY(100%) scale(0.9)', opacity: '0' },
+              },
+               'ai-highlight': {
+                '0%': { 'box-shadow': '0 0 35px rgba(14, 165, 233, 0.5), 0 0 0 0 rgba(251, 191, 36, 0.7)' },
+                '50%': { 'box-shadow': '0 0 35px rgba(14, 165, 233, 0.5), 0 0 25px 10px rgba(251, 191, 36, 0)' },
+                '100%': { 'box-shadow': '0 0 35px rgba(14, 165, 233, 0.5), 0 0 0 0 rgba(251, 191, 36, 0)' },
+              },
+            },
+            animation: {
+              aurora: 'aurora 8s ease infinite',
+              'pulse-glow-base': 'pulse-glow-base 2.5s ease-in-out infinite',
+              'pulse-glow-selected': 'pulse-glow-selected 2s ease-in-out infinite',
+              'flow-packet-pulse': 'flow-packet-pulse 1.5s ease-in-out infinite',
+              'toast-in': 'toast-in 0.3s ease-out forwards',
+              'toast-out': 'toast-out 0.3s ease-in forwards',
+              'ai-highlight': 'ai-highlight 1.5s ease-out forwards',
+            }
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        overscroll-behavior: none;
+        font-family: 'Inter', sans-serif;
+      }
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+      .aurora-background {
+        background: linear-gradient(-45deg, #0ea5e9, #4f46e5, #d946ef, #14b8a6);
+        background-size: 400% 400%;
+        animation: aurora 8s ease infinite;
+        z-index: -1;
+      }
+      .glass-pane {
+        backdrop-filter: blur(24px) saturate(160%);
+        -webkit-backdrop-filter: blur(24px) saturate(160%);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .command-palette-overlay {
+        background-color: rgba(0,0,0,0.5);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+      }
+      .connection-path {
+        transition: stroke 0.2s ease-in-out, stroke-width 0.2s ease-in-out;
+      }
+      .connection-group:hover .connection-path {
+        stroke: #38bdf8;
+        stroke-width: 2.5px;
+      }
+      .connection-group.selected .connection-path {
+        stroke: #7dd3fc;
+        animation: pulse-glow-selected 2s ease-in-out infinite;
+      }
+      
+      .connection-glow-base {
+        stroke: url(#flow-glow-gradient);
+        animation: pulse-glow-base 2.5s ease-in-out infinite;
+        pointer-events: none;
+      }
+      
+      .flow-packet-visual {
+         animation: flow-packet-pulse 1.5s ease-in-out infinite;
+         transform-origin: center;
+         transform-box: fill-box;
+      }
+
+      .packet-label {
+        font-family: 'Inter', sans-serif;
+        font-size: 11px;
+        font-weight: 700;
+        fill: #ffffff;
+        text-anchor: middle;
+        dominant-baseline: middle;
+        paint-order: stroke;
+        stroke: #00000077;
+        stroke-width: 3px;
+        stroke-linecap: butt;
+        stroke-linejoin: miter;
+      }
+      .connection-label {
+        font-family: sans-serif;
+        font-size: 12px;
+        fill: #a0a0a0;
+        text-anchor: middle;
+      }
+       .connection-group.selected .connection-label {
+        fill: #f0f0f0;
+        font-weight: bold;
+      }
+
+      /* === RESIZABLE PANELS === */
+      [data-panel-resize-handle] {
+        width: 8px;
+        background-color: transparent;
+        position: relative;
+        outline: none;
+        transition: background-color 0.2s ease;
+      }
+       [data-panel-resize-handle]:hover, [data-panel-resize-handle][data-active] {
+        background-color: rgba(14, 165, 233, 0.3);
+      }
+      [data-panel-resize-handle]::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 2px;
+        height: 30px;
+        background-color: rgba(255,255,255,0.2);
+        border-radius: 2px;
+      }
+      .ai-highlight > div { /* Target the inner div of the ModuleNode */
+          animation-name: ai-highlight;
+          animation-duration: 2.5s;
+          animation-timing-function: ease-out;
+      }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.3.1",
+    "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
+    "react-dnd": "https://esm.sh/react-dnd@16.0.1?external=react,react-dom",
+    "react-dnd-html5-backend": "https://esm.sh/react-dnd-html5-backend@16.0.1?external=react,react-dom",
+    "lucide-react": "https://esm.sh/lucide-react@0.525.0?external=react",
+    "uuid": "https://esm.sh/uuid@9.0.1",
+    "react-markdown": "https://esm.sh/react-markdown@9.0.1?external=react",
+    "@google/genai": "https://esm.sh/@google/genai@0.1.3",
+    "react-resizable-panels": "https://esm.sh/react-resizable-panels@2.0.21?external=react",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.0/",
+    "react/": "https://esm.sh/react@^19.1.0/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-canvas-bg text-text-primary">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
